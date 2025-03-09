@@ -1,0 +1,984 @@
+---
+title: "R-Function"
+output: html_document
+date: "2025-03-09"
+---
+
+Below is a detailed set of notes on **Functions in R**, designed for beginners and progressing to more advanced concepts. These notes explain what functions are, why and when to use them, how to handle return values with different data types, and include examples to illustrate each point.
+
+------------------------------------------------------------------------
+
+# Notes on Functions in R
+
+## 1. What is a Function in R?
+
+A **function** in R is a block of reusable code that performs a specific task. It takes input (called arguments or parameters), processes it, and optionally returns an output. Functions help organize code, make it reusable, and reduce repetition.
+
+### Key Features of Functions:
+
+-   **Modularity**: Break complex problems into smaller, manageable tasks.
+-   **Reusability**: Write once, use multiple times.
+-   **Abstraction**: Hide implementation details; focus on what the function does.
+
+### Syntax of a Function in R:
+
+```{r}
+function_name <- function(arguments) {
+  # Code to execute
+  return(value)  # Optional return statement
+}
+```
+
+-   `function_name`: Name you give to the function.
+-   `arguments`: Inputs (optional; can be zero or more).
+-   `return()`: Specifies the output (optional; if omitted, the last evaluated expression is returned).
+
+------------------------------------------------------------------------
+
+## 2. Why Use Functions?
+
+-   **Efficiency**: Avoid rewriting the same code multiple times.
+-   **Readability**: Makes code cleaner and easier to understand.
+-   **Debugging**: Easier to test and fix small, isolated pieces of code.
+-   **Scalability**: Functions can be reused across projects or modified for new tasks.
+
+### When to Use Functions?
+
+-   When you need to perform a task repeatedly with different inputs.
+-   When you want to simplify complex operations into a single call.
+-   When you want to share code with others or use it in multiple scripts.
+
+------------------------------------------------------------------------
+
+## 3. Creating a Basic Function
+
+### Example 1: Simple Function Without Arguments
+
+```{r}
+greet <- function() {
+  message <- "Hello, World!"
+  print(message)
+}
+
+# Call the function
+greet()
+```
+
+**Output**: `"Hello, World!"`
+
+-   No arguments are passed.
+-   The function simply prints a message.
+
+------------------------------------------------------------------------
+
+### Example 2: Function With Arguments
+
+```{r}
+add_numbers <- function(a, b) {
+  sum <- a + b
+  return(sum)
+}
+
+# Call the function
+result <- add_numbers(5, 3)
+print(result)
+```
+
+**Output**: `8`
+
+-   Arguments `a` and `b` are inputs.
+-   The function returns their sum using `return()`.
+
+------------------------------------------------------------------------
+
+## 4. Default Arguments
+
+You can assign default values to arguments, making them optional.
+
+### Example 3: Function With Default Arguments
+
+```{r}
+multiply <- function(x, y = 2) {
+  result <- x * y
+  return(result)
+}
+
+# Call with one argument (uses default y = 2)
+print(multiply(5))        # Output: 10
+
+# Call with both arguments
+print(multiply(5, 3))     # Output: 15
+```
+
+-   If `y` is not provided, it defaults to `2`.
+-   You can override the default by passing a value.
+
+------------------------------------------------------------------------
+
+## 5. Returning Values in R
+
+Functions in R can return different data types: numbers, strings, vectors, lists, data frames, etc. The `return()` statement explicitly specifies the output, but if omitted, the last evaluated expression is returned implicitly.
+
+### Example 4: Returning Different Data Types
+
+#### a. Numeric Return
+
+```{r}
+square <- function(x) {
+  return(x * x)
+}
+
+result <- square(4)
+print(result)  # Output: 16
+```
+
+#### b. String Return
+
+```{r}
+get_greeting <- function(name) {
+  greeting <- paste("Hello,", name)
+  return(greeting)
+}
+
+result <- get_greeting("Alice")
+print(result)  # Output: "Hello, Alice"
+```
+
+#### c. Vector Return
+
+```{r}
+double_vector <- function(vec) {
+  return(vec * 2)
+}
+
+result <- double_vector(c(1, 2, 3))
+print(result)  # Output: [1] 2 4 6
+```
+
+#### d. List Return
+
+```{r}
+person_info <- function(name, age) {
+  info <- list(Name = name, Age = age)
+  return(info)
+}
+
+result <- person_info("Bob", 25)
+print(result)  
+# Output: $Name [1] "Bob" 
+#         $Age  [1] 25
+```
+
+#### e. Implicit Return (No `return()`)
+
+```{r}
+subtract <- function(a, b) {
+  a - b  # Last expression is returned
+}
+
+result <- subtract(10, 4)
+print(result)  # Output: 6
+```
+
+------------------------------------------------------------------------
+
+## 6. Scope of Variables in Functions
+
+-   **Local Variables**: Defined inside the function; only accessible within it.
+-   **Global Variables**: Defined outside; accessible everywhere unless overridden.
+
+### Example 5: Local vs Global Scope
+
+```{r}
+x <- 10  # Global variable
+
+modify_x <- function() {
+  x <- 5  # Local variable
+  print(x)
+}
+
+modify_x()  # Output: 5
+print(x)    # Output: 10 (global x unchanged)
+```
+
+-   The local `x` inside the function doesn’t affect the global `x`.
+
+------------------------------------------------------------------------
+
+## 7. Advanced Examples
+
+### Example 6: Function with Conditional Logic
+
+```{r}
+is_positive <- function(num) {
+  if (num > 0) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
+print(is_positive(5))   # Output: TRUE
+print(is_positive(-2))  # Output: FALSE
+```
+
+### Example 7: Function with Multiple Returns
+
+```{r}
+math_operations <- function(a, b) {
+  sum <- a + b
+  diff <- a - b
+  prod <- a * b
+  return(list(Sum = sum, Difference = diff, Product = prod))
+}
+
+result <- math_operations(6, 4)
+print(result)
+# Output: $Sum [1] 10 
+#         $Difference [1] 2 
+#         $Product [1] 24
+```
+
+### Example 8: Function to Process a Data Frame
+
+```{r}
+summarize_data <- function(df) {
+  mean_val <- mean(df$values)
+  max_val <- max(df$values)
+  return(list(Mean = mean_val, Max = max_val))
+}
+
+# Create a sample data frame
+data <- data.frame(values = c(1, 2, 3, 4, 5))
+result <- summarize_data(data)
+print(result)  
+# Output: $Mean [1] 3 
+#         $Max  [1] 5
+```
+
+------------------------------------------------------------------------
+
+## 8. Common Use Cases for Functions in R
+
+1.  **Data Cleaning**: Write a function to remove NA values or outliers.
+2.  **Statistical Analysis**: Create functions for custom calculations (e.g., mean, median).
+3.  **Visualization**: Automate repetitive plotting tasks.
+4.  **Simulation**: Run experiments with varying parameters.
+
+### Example 9: Practical Use Case - Cleaning Data
+
+```{r}
+remove_na <- function(vec) {
+  return(vec[!is.na(vec)])
+}
+
+data <- c(1, NA, 3, NA, 5)
+cleaned_data <- remove_na(data)
+print(cleaned_data)  # Output: [1] 1 3 5
+```
+
+------------------------------------------------------------------------
+
+## 9. Tips for Writing Functions in R
+
+-   Use meaningful names for functions and arguments.
+-   Add comments to explain complex logic.
+-   Keep functions short and focused on one task.
+-   Test with different inputs to ensure robustness.
+
+------------------------------------------------------------------------
+
+## 10. Summary
+
+-   A **function** is a reusable block of code that performs a specific task.
+-   Use functions to save time, improve readability, and modularize code.
+-   Functions can return any data type: numeric, string, vector, list, etc.
+-   Arguments can have defaults, and returns can be explicit (`return()`) or implicit.
+-   Scope matters: local variables stay inside functions; global variables are outside.
+
+------------------------------------------------------------------------
+
+# Practice Questions in R
+
+## Multiplication Table
+
+Write a function that inputs a number and prints the multiplication table of that number.
+
+```{r}
+# Function to print multiplication table
+table <- function(a) {
+  cat(sprintf("Table of %d is\n\n", a))
+  for (i in 1:10) {
+    cat(sprintf("%d * %d = %d\n", i, a, i * a))
+  }
+}
+
+# Example usage
+table(10)
+```
+
+**Output**:
+
+```         
+Table of 10 is
+
+1 * 10 = 10
+2 * 10 = 20
+3 * 10 = 30
+4 * 10 = 40
+5 * 10 = 50
+6 * 10 = 60
+7 * 10 = 70
+8 * 10 = 80
+9 * 10 = 90
+10 * 10 = 100
+```
+
+**Note**: In R, `cat()` is used for printing, and `sprintf()` formats the string similarly to Python’s `format()`.
+
+------------------------------------------------------------------------
+
+## Twin Prime
+
+Write a program to print twin primes less than 1000. Twin primes are two consecutive odd numbers that are both prime.
+
+### Algorithm-1
+
+```{r}
+# Function to check if a number is prime
+isPrime <- function(a) {
+  if (a < 2) return(FALSE)
+  for (i in 2:sqrt(a)) {
+    if (a %% i == 0) return(FALSE)
+  }
+  return(TRUE)
+}
+
+# Function to find twin primes below a given number
+TwinPrime <- function(x) {
+  temp <- 0
+  for (i in seq(3, x - 2, by = 2)) {
+    if (isPrime(i) && isPrime(i + 2)) {
+      cat(sprintf("(%d,%d)\n", i, i + 2))
+      temp <- temp + 1
+    }
+  }
+  cat(sprintf("no of twin prime is %d\n", temp))
+}
+
+# Example usage
+TwinPrime(1000)
+```
+
+**Output** (partial):
+
+```         
+(3,5)
+(5,7)
+(11,13)
+...
+(881,883)
+no of twin prime is 35
+```
+
+### Algorithm-2
+
+```{r}
+# Function to list all prime numbers below a given number
+listPrime <- function(a) {
+  lst <- c()
+  for (i in 2:a) {
+    is_prime <- TRUE
+    for (j in 2:sqrt(i)) {
+      if (i %% j == 0) {
+        is_prime <- FALSE
+        break
+      }
+    }
+    if (is_prime) lst <- c(lst, i)
+  }
+  return(lst)
+}
+
+# Function to print twin primes from the list
+twinPrime2 <- function(x) {
+  temp <- 0
+  prime <- listPrime(x)
+  for (i in 1:(length(prime) - 1)) {
+    if (prime[i + 1] - prime[i] == 2) {
+      cat(sprintf("(%d,%d)\n", prime[i], prime[i + 1]))
+      temp <- temp + 1
+    }
+  }
+  cat(sprintf("Number of twin prime below %d, is %d\n", x, temp))
+}
+
+# Example usage
+twinPrime2(1000)
+```
+
+**Output** (partial):
+
+```         
+(3,5)
+(5,7)
+(11,13)
+...
+(881,883)
+Number of twin prime below 1000, is 35
+```
+
+**Note**: R uses vectors instead of lists, and indexing starts at 1.
+
+------------------------------------------------------------------------
+
+## Prime Factorization
+
+Write a program to find the prime factors of a number (e.g., prime factors of 56 are 2, 2, 2, 7).
+
+### Algorithm-1
+
+```{r}
+primeFact <- function(n) {
+  if (n == 1) {
+    cat("no prime factor for 1\n")
+    return()
+  }
+  lst <- c()
+  for (i in 2:n) {
+    while (n %% i == 0) {
+      lst <- c(lst, i)
+      n <- n %/% i
+    }
+  }
+  cat(sprintf("prime factor of are: %s\n", toString(lst)))
+}
+
+# Example usage
+primeFact(44289)
+```
+
+**Output**:
+
+```         
+prime factor of are: 3, 3, 7, 19, 37
+```
+
+### Algorithm-2 (More Efficient)
+
+```{r}
+factors <- function(num) {
+  if (num == 1) {
+    cat("no prime factors for 1\n")
+    return()
+  }
+  factor <- c()
+  for (i in 2:sqrt(num)) {
+    while (num %% i == 0) {
+      factor <- c(factor, i)
+      num <- num %/% i
+    }
+  }
+  if (num != 1) factor <- c(factor, num)  # Add remaining factor
+  cat(sprintf("factors are: %s\n", toString(factor)))
+}
+
+# Example usage
+factors(44289)
+factors(9905973)
+```
+
+**Output**:
+
+```         
+factors are: 3, 3, 7, 19, 37
+factors are: 3, 7, 11, 19, 37, 61
+```
+
+**Note**: `%/%` is integer division in R. This algorithm is more efficient as it only checks up to the square root.
+
+------------------------------------------------------------------------
+
+## Permutation and Combination
+
+Implement permutation (p(n,r) = n! / (n-r)!) and combination (c(n,r) = n! / (r! \* (n-r)!)).
+
+```{r}
+# Factorial function
+fact <- function(n) {
+  factorial <- 1
+  for (i in 1:n) {
+    factorial <- factorial * i
+  }
+  return(factorial)
+}
+
+# Permutation function
+p <- function(n, r) {
+  if (n < r) {
+    cat("invalid entry\n")
+    return(NULL)
+  }
+  perm <- fact(n) / fact(n - r)
+  return(perm)
+}
+
+# Combination function
+c <- function(n, r) {
+  if (n < r) {
+    cat("invalid\n")
+    return(NULL)
+  }
+  combi <- p(n, r) / fact(r)
+  return(combi)
+}
+
+# Example usage with input simulation
+n <- 5  # Simulate input
+r <- 2  # Simulate input
+cat(sprintf("permutation of entered numbers is %d, and combination is %d\n", p(n, r), c(n, r)))
+
+# Test individual calls
+fact(5)  # 120
+p(5, 3)  # 60
+c(5, 3)  # 10
+```
+
+**Output**:
+
+```         
+permutation of entered numbers is 20, and combination is 10
+```
+
+**Note**: R doesn’t have a direct equivalent to Python’s `input()`, so values are hardcoded here.
+
+------------------------------------------------------------------------
+
+## Decimal to Binary
+
+Write a function that converts a decimal number to a binary number.
+
+### Algorithm-1
+
+```{r}
+Decimal2Binary <- function(num) {
+  lst <- c()
+  while (num > 0) {
+    i <- num %% 2
+    lst <- c(i, lst)  # Prepend to reverse order
+    num <- num %/% 2
+  }
+  cat(paste(lst, collapse = ""))
+}
+
+# Example usage
+Decimal2Binary(10)  # Output: 1010
+```
+
+### Algorithm-2 (Recursive)
+
+```{r}
+rDecimal2Binary <- function(num) {
+  if (num > 1) {
+    rDecimal2Binary(num %/% 2)
+  }
+  cat(num %% 2)
+}
+
+# Example usage
+rDecimal2Binary(10)  # Output: 1010
+```
+
+### Algorithm-3 (Using Bitwise Operators)
+
+```{r}
+binary <- function(num) {
+  temp <- c()
+  while (num > 0) {
+    temp <- c(num %% 2, temp)  # Bitwise equivalent: num & 1
+    num <- num %/% 2           # Bitwise equivalent: num >> 1
+  }
+  return(as.integer(paste(temp, collapse = "")))
+}
+
+# Example usage
+binary(10)  # Output: 1010
+```
+
+**Note**: R lacks direct bitwise operators like `&` and `>>` for integers in the same way as Python, so modulo and integer division are used.
+
+------------------------------------------------------------------------
+
+## Armstrong Number
+
+Write functions to compute the sum of cubes of digits, check if a number is an Armstrong number, and print the result.
+
+### Algorithm-1
+
+```{r}
+cubesum <- function(n) {
+  digits <- as.integer(strsplit(as.character(n), "")[[1]])
+  s <- sum(digits^3)
+  return(s)
+}
+
+isArmstrong <- function(a) {
+  return(a == cubesum(a))
+}
+
+PrintArmstrong <- function(num) {
+  if (isArmstrong(num)) {
+    cat(sprintf("%d is an armstrong number\n", num))
+  } else {
+    cat(sprintf("%d is NOT an armstrong number\n", num))
+  }
+}
+
+# Example usage
+cubesum(153)         # 153
+isArmstrong(153)     # TRUE
+PrintArmstrong(153)  # 153 is an armstrong number
+```
+
+### Algorithm-2
+
+```{r}
+cubesum1 <- function(n) {
+  s <- 0
+  while (n > 0) {
+    i <- n %% 10
+    s <- s + i^3
+    n <- n %/% 10
+  }
+  return(s)
+}
+
+isArmstrong1 <- function(a) {
+  return(a == cubesum1(a))
+}
+
+PrintArmstrong1 <- function(num) {
+  if (isArmstrong1(num)) {
+    cat(sprintf("%d is an armstrong number\n", num))
+  } else {
+    cat(sprintf("%d is NOT an armstrong number\n", num))
+  }
+}
+
+# Example usage
+PrintArmstrong1(153)  # 153 is an armstrong number
+PrintArmstrong1(370)  # 370 is an armstrong number
+PrintArmstrong1(407)  # 407 is an armstrong number
+```
+
+------------------------------------------------------------------------
+
+## Product of Digits
+
+Write a function that returns the product of digits of a number.
+
+### Algorithm-1
+
+```{r}
+prodDigit <- function(n) {
+  s <- 1
+  while (n > 0) {
+    i <- n %% 10
+    s <- s * i
+    n <- n %/% 10
+  }
+  return(s)
+}
+
+# Example usage
+prodDigit(1234546855)  # 576000
+```
+
+### Algorithm-2
+
+```{r}
+prodDigit_v2 <- function(n) {
+  digits <- as.integer(strsplit(as.character(n), "")[[1]])
+  s <- prod(digits)
+  return(s)
+}
+
+# Example usage
+prodDigit_v2(1234546855)  # 576000
+```
+
+------------------------------------------------------------------------
+
+## Multiplicative Digital Root
+
+Write functions to compute the multiplicative digital root (MDR) and multiplicative persistence (MPersistence).
+
+### Algorithm-1 (Recursive)
+
+```{r}
+MDR <- function(num) {
+  if (num < 10) return(num)
+  num <- prodDigit(num)
+  return(MDR(num))
+}
+
+MPersistance <- function(num) {
+  i <- 0
+  while (num > 9) {
+    num <- prodDigit(num)
+    i <- i + 1
+  }
+  return(i)
+}
+
+# Example usage
+MDR(341)         # 2
+MPersistance(341) # 2
+```
+
+### Algorithm-2
+
+```{r}
+MDR1 <- function(num) {
+  while (num > 9) {
+    num <- prodDigit(num)
+  }
+  return(num)
+}
+
+MPersistance1 <- function(num) {
+  i <- 0
+  while (num > 9) {
+    num <- prodDigit(num)
+    i <- i + 1
+  }
+  return(i)
+}
+
+# Example usage
+MDR1(341)         # 2
+MPersistance1(86)  # 3
+```
+
+------------------------------------------------------------------------
+
+## HCF of Two Numbers
+
+Write a recursive function to find the HCF (Highest Common Factor).
+
+```{r}
+rHCF <- function(a, b) {
+  s <- min(a, b)
+  l <- max(a, b)
+  if (l %% s == 0) return(s)
+  return(rHCF(l %% s, s))
+}
+
+# Example usage
+rHCF(121, 33)  # 11
+a <- 25; b <- 1215
+cat(sprintf("the HCF of %d and %d is %d\n", a, b, rHCF(a, b)))  # 5
+```
+
+------------------------------------------------------------------------
+
+## Sum of Proper Divisors
+
+Write a function to find the sum of proper divisors of a number.
+
+### Algorithm-1
+
+```{r}
+sumPdivisor <- function(n) {
+  lst <- c()
+  for (i in 1:(n - 1)) {
+    if (n %% i == 0) lst <- c(lst, i)
+  }
+  cat(sprintf("proper divisors of %d is: %s \ntheir sum are: ", n, toString(lst)))
+  return(sum(lst))
+}
+
+# Example usage
+sumPdivisor(36)  # 55
+sumPdivisor(28)  # 28
+```
+
+### Algorithm-2
+
+```{r}
+sumPdivisor1 <- function(n) {
+  lst <- c()
+  for (i in 1:sqrt(n)) {
+    if (n %% i == 0) {
+      lst <- c(lst, i)
+      d <- n %/% i
+      if (d != i && d != n) lst <- c(lst, d)
+    }
+  }
+  lst <- sort(lst)
+  cat(sprintf("proper divisors of %d is: %s \ntheir sum are: ", n, toString(lst)))
+  return(sum(lst))
+}
+
+# Example usage
+sumPdivisor1(36)  # 55
+```
+
+------------------------------------------------------------------------
+
+## Perfect Number
+
+Write a program to print all perfect numbers in a given range (sum of proper divisors equals the number).
+
+### Algorithm-1
+
+```{r}
+sumPdivisor <- function(n) {
+  lst <- c()
+  for (i in 1:(n - 1)) {
+    if (n %% i == 0) lst <- c(lst, i)
+  }
+  #cat(sprintf("proper divisors of %d is: %s \ntheir sum are: ", n, toString(lst)))
+  return(sum(lst))
+}
+
+# Example usage
+sumPdivisor(36)  # 55
+sumPdivisor(28)  # 28
+```
+
+```{r}
+findPerfectNum <- function(a, b) {
+  plst <- c()
+  for (i in (a + 1):(b - 1)) {
+    if (sumPdivisor(i) == i) plst <- c(plst, i)
+  }
+  return(plst)
+}
+
+# Example usage
+findPerfectNum(1, 10000)  # 6, 28, 496, 8128
+```
+
+### Algorithm-2
+
+```{r}
+sumPdivisor1 <- function(n) {
+  lst <- c()
+  for (i in 1:sqrt(n)) {
+    if (n %% i == 0) {
+      lst <- c(lst, i)
+      d <- n %/% i
+      if (d != i && d != n) lst <- c(lst, d)
+    }
+  }
+  lst <- sort(lst)
+  return(sum(lst))
+}
+
+# Example usage
+```
+
+```{r}
+findPerfectNum1 <- function(a, b) {
+  plst <- c()
+  for (i in (a + 1):(b - 1)) {
+    if (sumPdivisor1(i) == i) plst <- c(plst, i)
+  }
+  return(plst)
+}
+
+# Example usage
+findPerfectNum1(1, 10000)  # 6, 28, 496, 8128
+```
+
+------------------------------------------------------------------------
+
+## Amicable Numbers
+
+Write a function to print pairs of amicable numbers in a range.
+
+### Algorithm-1
+
+```{r}
+printAmicableNum <- function(a, b) {
+  for (i in a:(b - 1)) {
+    for (j in b:(i + 1)) {
+      if (sumPdivisor1(i) == j && sumPdivisor1(j) == i) {
+        cat(sprintf("%d %d\n", i, j))
+      }
+    }
+  }
+}
+
+# Example usage
+printAmicableNum(200, 500)
+```
+
+### Algorithm-2.2 (Efficient with Set-like Behavior)
+
+```{r}
+amicables <- function(low, high) {
+  s <- list()
+  for (i in low:high) {
+    temp <- sumPdivisor1(i)
+    if (i != temp && sumPdivisor1(temp) == i) {
+      pair <- c(min(i, temp), max(i, temp))
+      s[[length(s) + 1]] <- pair
+    }
+  }
+  unique_pairs <- unique(s)
+  for (pair in unique_pairs) {
+    cat(sprintf("(%d, %d) is an amicable pair\n", pair[1], pair[2]))
+  }
+}
+
+# Example usage
+amicables(1, 1300)
+```
+
+**Output** (partial):
+
+```         
+(220, 284) is an amicable pair
+(1184, 1210) is an amicable pair
+...
+```
+
+------------------------------------------------------------------------
+
+## Odd Number by Filter
+
+Write a program to filter odd numbers in a list using `Filter()`.
+
+### Algorithm-2
+
+```{r}
+lst <- c(2, 2, 5, 8, 9, 7, 5, 6, 3)
+lst2 <- Filter(function(x) x %% 2 == 0, lst)
+print(lst2)  # 2, 2, 8, 6
+```
+
+------------------------------------------------------------------------
+
+## lapply()
+
+```{r}
+lst <- c(2, 3, 7, 9, 2)
+lst2 <- unlist(lapply(lst, function(x) x^3))
+print(lst2)  # 8, 27, 343, 729, 8
+```
+
+------------------------------------------------------------------------
+
+## lapply()
+
+Write a program to create a list of cubes of even numbers in a given list.
+
+```{r}
+lst <- c(2, 8, 4, 3, 4, 12, 13, 14)
+lst3 <- unlist(lapply(Filter(function(x) x %% 2 == 0, lst), function(x) x^3))
+print(lst3)  # 8, 512, 64, 64, 1728, 2744
+```
+
+------------------------------------------------------------------------
